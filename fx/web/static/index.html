@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+Welcome to Main
+<script>
+// request the data
+d3.json("/historic/GBPUSD",
+    function(error, ticks) {
+        first = ticks[0];
+        display(first);
+    }
+);
+
+function display(tick) {
+    document.write(tick);
+}
+</script>
+</body>
+</html>
