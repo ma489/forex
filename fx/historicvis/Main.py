@@ -1,12 +1,13 @@
 from bottle import route, run, static_file, response
-from fx.web.RetrieveData import RetrieveData
 from bson.json_util import dumps
+
+from fx.historicvis.web.RetrieveData import RetrieveData
 
 RD = RetrieveData()
 
 @route('/')
 def main():
-    return static_file('index.html', 'web/static/')
+    return static_file('index.html', 'historicvis/web/static/')
 
 @route('/historic/<currency_pair>')
 def historic(currency_pair='None'):

@@ -1,7 +1,9 @@
 import csv
 from datetime import datetime
-from fx import Tick
+
 from pymongo import MongoClient
+
+from fx.historicvis import Tick
 
 #Read file
 CURRENCY_PAIR = 'GBPUSD'

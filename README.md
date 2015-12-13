@@ -1,1 +1,1 @@
-FX Trading Simulation and Visualisation
+FX Trading Simulation and Historic Visualisation
