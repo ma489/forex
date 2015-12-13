@@ -22,9 +22,10 @@ with open(FILE, 'r') as csvfile:
         time = data[0]
         formattedTime = datetime.strptime(time, '%H%M%S%f')
         formattedTimeString = formattedTime.strftime('%H:%M:%S.%f')
+        dateAndTime = formattedDateString + " " + formattedTimeString
         bid = data[1]
         ask = data[2]
-        tick = Tick.Tick(FORMATTED_CURRENCY_PAIR, formattedDateString, formattedTimeString, bid, ask)
+        tick = Tick.Tick(FORMATTED_CURRENCY_PAIR, dateAndTime, bid, ask)
         tickList.append(tick)
 print("Done.")
 print("Size: ")
