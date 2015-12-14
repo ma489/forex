@@ -50,3 +50,5 @@ tick_data.insert_many(records)
 print(db.collection_names(include_system_collections=False))
 print("Retrieving first 'record'...")
 print(tick_data.find_one())
+
+tick_data.createIndex(("DateTime",1)) #TODO is this right?

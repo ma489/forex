@@ -8,8 +8,8 @@ class Order:
 
     def __str__(self):
         string = "Order"
-        string += "\n Type: " + self.order_type.name
-        string += "\n Price: %f" % self.order_price
-        string += "\n Size: %d" % self.order_size
-        string += "\n Conditions: " + self.order_conditions.name
+        string += ":\n Type: " + self.order_type.name
+        string += ",\n Price: %f" % self.order_price
+        string += ",\n Size: %d" % self.order_size
+        string += ",\n Conditions: " + self.order_conditions.name
         return string

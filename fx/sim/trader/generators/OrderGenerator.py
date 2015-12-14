@@ -12,7 +12,7 @@ class OrderGenerator:
         self.type_gen = OrderTypeGenerator()
         self.cond_gen = OrderConditionsGenerator()
 
-    def generateOrder(self, minAsk, maxAsk, minBid, maxBid):
+    def generateOrder(self):
         order_price = self.price_gen.generateAskPrice()
         order_size = self.size_gen.generateOrderSize()
         order_type = self.type_gen.generateOrderType()

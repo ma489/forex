@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Exchange</title>
+    </head>
+    <b>Orders</b>
+    <br><br>
+    <body>
+    <!--TODO move all javascript to separate files-->
+        <script>
+            var ws = new WebSocket("ws://127.0.0.1:5678/"),
+                buyOrders = document.createElement('ul');
+                sellOrders = document.createElement('ul');
+                matchedOrders = document.createElement('ul');
+
+            ws.onmessage = function (event) {
+                if (event.data.indexOf("Buy") > -1) { //this is a buy order
+                    var messages = document.getElementsByTagName('ul')[0];
+                } else if (event.data.indexOf("Sell") > -1) {// this is a sell order
+                    var messages = document.getElementsByTagName('ul')[1];
+                } else if (event.data.indexOf("Matched") > -1) { //orders matched
+                    var messages = document.getElementsByTagName('ul')[2];
+                }
+                var message = document.createElement('li');
+                var content = document.createTextNode(event.data);
+                message.appendChild(content);
+                messages.appendChild(message);
+            };
+
+            boTitle = document.createTextNode("Buy Orders");
+            document.body.appendChild(boTitle);
+            document.body.appendChild(buyOrders);
+            soTitle = document.createTextNode("Sell Orders");
+            document.body.appendChild(soTitle);
+            document.body.appendChild(sellOrders);
+            moTitle = document.createTextNode("Matched Orders");
+            document.body.appendChild(moTitle);
+            document.body.appendChild(matchedOrders);
+        </script>
+    </body>
+    <!--TODO setup page structure in HTML-->
+</html>
