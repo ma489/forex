@@ -1,3 +1,6 @@
+import calendar
+
+import time
 from bottle import route, run, static_file, response
 from bson.json_util import dumps
 
@@ -16,4 +19,5 @@ def historic(currency_pair='None'):
     return dumps(result)
 
 #Run server
-run(host='localhost', port=8080, debug=True)
+#run(host='localhost', port=8080, debug=True)
+run(host='localhost', port=8080, server='paste')

@@ -17,6 +17,7 @@ print("Retrieved.")
 o = OrderGenerator(minAsk, maxAsk, minBid, maxBid)
 
 while True:
+    #simulate trades; at some point there will be interactive UI
     order = o.generateOrder(minAsk, maxAsk, minBid, maxBid)
     print(order)
     time.sleep(GAP_SECONDS)

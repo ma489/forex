@@ -10,6 +10,6 @@ order = None  # TODO read from message queue
 matched = orderMatcher.match(order)
 
 if matched:
-    pass  # TODO update UI
+    pass  # TODO update UI (bid, ask, last)
 else:
     orderDao.persist(order)  # TODO if not, persist to mongo DB with other yet-unmatched orders
