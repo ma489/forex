@@ -16,12 +16,21 @@
             ws.onmessage = function (event) {
                 if (event.data.indexOf("Buy") > -1) { //this is a buy order
                     var messages = document.getElementsByTagName('ul')[0];
+                    orderId = event.data.split(" ")[10];
                 } else if (event.data.indexOf("Sell") > -1) {// this is a sell order
                     var messages = document.getElementsByTagName('ul')[1];
+                    orderId = event.data.split(" ")[10];
                 } else if (event.data.indexOf("Matched") > -1) { //orders matched
                     var messages = document.getElementsByTagName('ul')[2];
+                    orderId = event.data.split(" ")[10];
+                } else if (event.data.indexOf("Filled") > -1) { //orders matched
+                    orderId = event.data.split(" ")[1];
+                    var orderEntry = document.getElementById(orderId);
+                    orderEntry.style.color = "red";
+                    orderEntry.style.textDecoration = "line-through";
                 }
                 var message = document.createElement('li');
+                message.setAttribute("id",orderId);
                 var content = document.createTextNode(event.data);
                 message.appendChild(content);
                 messages.appendChild(message);
