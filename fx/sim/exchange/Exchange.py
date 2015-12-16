@@ -75,3 +75,4 @@ def main(websocket, path):
 start_server = websockets.serve(main, '127.0.0.1', 5678)
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
+#asyncio.get_event_loop().stop()

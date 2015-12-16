@@ -18,6 +18,10 @@ def historic(currency_pair='None'):
     response.content_type = 'application/json'
     return dumps(result)
 
+@route('/exchange')
+def main():
+    return static_file('Exchange.html', 'historicvis/web/static/')
+
 #Run server
 #run(host='localhost', port=8080, debug=True)
 run(host='localhost', port=8080, server='paste')
