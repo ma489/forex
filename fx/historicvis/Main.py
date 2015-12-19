@@ -1,6 +1,3 @@
-import calendar
-
-import time
 from bottle import route, run, static_file, response
 from bson.json_util import dumps
 
@@ -22,6 +19,8 @@ def historic(currency_pair='None'):
 def main():
     return static_file('Exchange.html', 'historicvis/web/static/')
 
-#Run server
-#run(host='localhost', port=8080, debug=True)
+@route('/static/:filename#.*#')
+def main(filename):
+    return static_file(filename, 'historicvis/web/static/')
+
 run(host='localhost', port=8080, server='paste')

@@ -7,11 +7,8 @@ d3.json("/historic/GBPUSD",
 
 // Set the dimensions of the canvas / graph
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 600 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
-
-// Parse the date / time
-//var parseDate = d3.time.format("%d-%b-%y").parse;
+    width = 1200 - margin.left - margin.right,
+    height = 540 - margin.top - margin.bottom;
 
 // Set the ranges
 var x = d3.time.scale().range([0, width]);
@@ -19,7 +16,8 @@ var y = d3.scale.linear().range([height, 0]);
 
 // Define the axes
 var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").ticks(5);
+    .orient("bottom").ticks(5)
+    .tickFormat(d3.time.format("%d/%m/%y-%H:%M"));
 
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(5);
@@ -43,6 +41,7 @@ var svg = d3.select("body")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
 
+
 function display(ticks) { //rename to format datetime
     var parseDate = d3.time.format("%d-%b-%Y %H:%M:%S.%L").parse;
     ticks.forEach(function(tick) {
@@ -51,7 +50,6 @@ function display(ticks) { //rename to format datetime
         }
     )
 // Scale the range of the data
-    x.domain(d3.extent(ticks, function(d) { return d.DateTime; }));
     x.domain(d3.extent(ticks, function(d) { return d.DateTime; }));
     yMin = d3.min(ticks, function(d) { return d.Bid; }); //bid always < ask
     yMax = d3.max(ticks, function(d) { return d.Ask; }); // ask always > bid
@@ -65,7 +63,8 @@ function display(ticks) { //rename to format datetime
     // Add the valueline path.
     svg.append("path")
         .attr("class", "line")
-        .attr("d", valueline2(ticks));
+        .attr("d", valueline2(ticks))
+        .style("stroke", "red");
 
     // Add the X Axis
     svg.append("g")
@@ -77,4 +76,18 @@ function display(ticks) { //rename to format datetime
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
+
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+        .text("GBP/USD ('the cable'), over time");
+
+    legend = svg.append("g")
+      .attr("class","legend")
+      .attr("transform","translate(50,30)")
+      .style("font-size","12px")
+      .call(d3.legend);
 }

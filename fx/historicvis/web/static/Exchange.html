@@ -1,119 +1,82 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Exchange</title>
-    </head>
-    <body>
+<head>
+    <title>Exchange</title>
+</head>
+<body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">MansourFX</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">MansourFX</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/">Historic Data Visualisation</a></li>
-            <li class="active"><a href="#">Exchange Simulation</a></li>
-          </ul>
+            <ul class="nav navbar-nav">
+                <li><a href="/">Historic Data Visualisation</a></li>
+                <li class="active"><a href="#">Exchange Simulation</a></li>
+            </ul>
         </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-    <br><br><br>
-    <b>Order Book</b>
-    <div class="row">
-        <div class="col-md-6">Buy Orders</div>
-        <div class="col-md-6">Sell Orders</div>
-      </div>
-     <div class="col-md-6">
-          <table class="table table-striped" id="buyOrders">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Size</th>
-                  <!--TODO progress bar?-->
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-      </div>
-          <div class="col-md-6">
-          <table class="table table-striped" id="sellOrders">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Size</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    </div>
+</nav>
+<br><br><br>
+<b>Order Book</b>
+
+<div class="row">
+    <div class="col-md-6">Buy Orders</div>
+    <div class="col-md-6">Sell Orders</div>
+</div>
+<div class="col-md-6">
+    <table class="table table-striped" id="buyOrders">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Size</th>
+            <!--TODO progress bar?-->
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</div>
+<div class="col-md-6">
+    <table class="table table-striped" id="sellOrders">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Size</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</div>
 <br><br><br><br><br><br>
-    <!--TODO move all javascript to separate files-->
-        <script>
-            var ws = new WebSocket("ws://127.0.0.1:5678/"),
-                buyOrders = document.createElement('ul');
-                sellOrders = document.createElement('ul');
-                matchedOrders = document.createElement('ul');
+<script src="static/websocket.js"></script>
 
-            ws.onmessage = function (event) {
-                if (event.data.indexOf("Buy") > -1) { //this is a buy order
-                    var messages = document.getElementsByTagName('ul')[0];
-                    var buyOrdersTable = document.getElementById('buyOrders');
-                    var row = buyOrdersTable.insertRow(-1);
-                    var cell1 = row.insertCell(0);
-                    orderId = event.data.split(" ")[10];
-                    row.setAttribute("id", orderId);
-                    cell1.innerHTML = orderId;
-                    orderSize = event.data.split(" ")[6];
-                    var cell2 = row.insertCell(1);
-                    cell2.innerHTML = orderSize.slice(0, -2);
-                } else if (event.data.indexOf("Sell") > -1) {// this is a sell order
-                    var messages = document.getElementsByTagName('ul')[1];
-                    orderId = event.data.split(" ")[10];
-                    var sellOrders = document.getElementById('sellOrders');
-                    var row = sellOrders.insertRow(-1);
-                    var cell1 = row.insertCell(0);
-                    orderId = event.data.split(" ")[10];
-                    row.setAttribute("id", orderId);
-                    cell1.innerHTML = orderId;
-                    orderSize = event.data.split(" ")[6];
-                    var cell2 = row.insertCell(1);
-                    cell2.innerHTML = orderSize.slice(0, -2);
-                } else if (event.data.indexOf("Matched") > -1) { //orders matched
-                    var messages = document.getElementsByTagName('ul')[2];
-                    orderId = event.data.split(" ")[10];
-                } else if (event.data.indexOf("Filled") > -1) { //orders matched
-                    orderId = event.data.split(" ")[1];
-                    var orderEntry = document.getElementById(orderId);
-                    orderEntry.style.color = "red";
-                    orderEntry.style.textDecoration = "line-through";
-                }
-            };
-        </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-            <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+      integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
 
-     <link href="grid.css" rel="stylesheet">
-
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-    </body>
-    <!--TODO setup page structure in HTML-->
+</body>
+<!--TODO setup page structure in HTML-->
 </html>

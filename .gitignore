@@ -1,0 +1,9 @@
+.idea/workspace.xml
+fx/__pycache__/Tick.cpython-34.pyc
+fx/historicvis/__pycache__/
+fx/historicvis/web/__pycache__/
+fx/sim/__pycache__/
+fx/sim/exchange/__pycache__/
+fx/sim/model/__pycache__/
+fx/sim/trader/__pycache__/
+fx/sim/trader/generators/__pycache__/
