@@ -1,6 +1,6 @@
 import random
 
-from fx.sim.model.OrderConditions import OrderConditions
+from fx.exchangesim.model.OrderConditions import OrderConditions
 
 
 class OrderConditionsGenerator(object):

@@ -1,9 +1,9 @@
-from fx.sim.model.Order import Order
-from fx.sim.model.OrderConditions import OrderConditions
-from fx.sim.trader.generators.OrderConditionsGenerator import OrderConditionsGenerator
-from fx.sim.trader.generators.OrderPriceGenerator import PriceGenerator
-from fx.sim.trader.generators.OrderSizeGenerator import OrderSizeGenerator
-from fx.sim.trader.generators.OrderTypeGenerator import OrderTypeGenerator
+from fx.exchangesim.model.Order import Order
+from fx.exchangesim.model.OrderConditions import OrderConditions
+from fx.exchangesim.trader.generators.OrderConditionsGenerator import OrderConditionsGenerator
+from fx.exchangesim.trader.generators.OrderPriceGenerator import PriceGenerator
+from fx.exchangesim.trader.generators.OrderSizeGenerator import OrderSizeGenerator
+from fx.exchangesim.trader.generators.OrderTypeGenerator import OrderTypeGenerator
 
 
 class OrderGenerator:
@@ -13,7 +13,7 @@ class OrderGenerator:
         self.type_gen = OrderTypeGenerator()
         self.cond_gen = OrderConditionsGenerator()
 
-    def generateOrder(self):
+    def generateOrder(self, orderid):
         order_size = self.size_gen.generateOrderSize()
         order_type = self.type_gen.generateOrderType()
         order_conditions = self.cond_gen.generateOrderConditions()
@@ -21,5 +21,5 @@ class OrderGenerator:
             order_price = -1
         else:
             order_price = self.price_gen.generateAskPrice()
-        order = Order(order_type, order_price, order_size, order_conditions)
+        order = Order(order_type, order_price, order_size, order_conditions, orderid)
         return order

@@ -1,6 +1,6 @@
 import random
 
-from fx.sim.model.OrderType import OrderType
+from fx.exchangesim.model.OrderType import OrderType
 
 
 class OrderTypeGenerator(object):

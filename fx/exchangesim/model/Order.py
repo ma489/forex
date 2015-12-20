@@ -2,12 +2,13 @@ import shortuuid
 
 
 class Order:
-    def __init__(self, order_type, order_price, order_size, order_conditions):
+    def __init__(self, order_type, order_price, order_size, order_conditions, orderid):
         self.order_type = order_type
         self.order_price = order_price
         self.order_size = order_size
         self.order_conditions = order_conditions
-        self.order_id = shortuuid.ShortUUID().random(length=10)  # Obviously not suitable in the real-world
+        #self.order_id = shortuuid.ShortUUID().random(length=10)  # Obviously not suitable in the real-world
+        self.order_id = orderid
 
     def __str__(self):
         string = "Order"

@@ -1,3 +1,4 @@
+*.pyc
 .idea/workspace.xml
 fx/__pycache__/Tick.cpython-34.pyc
 fx/historicvis/__pycache__/

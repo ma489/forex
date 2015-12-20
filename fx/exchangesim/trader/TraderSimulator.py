@@ -1,12 +1,12 @@
 import time
-from fx.historicvis.web.RetrieveData import RetrieveData
-from fx.sim.trader.generators.OrderGenerator import OrderGenerator
-from queue import Queue
+
+from fx.exchangesim.trader.generators.OrderGenerator import OrderGenerator
+from fx.historicvis.data.RetrieveData import RetrieveData
 
 GAP_SECONDS = 3
 RD = RetrieveData()
 
-
+# simulate trades; at some point there will be interactive UI
 class TraderSimulator(object):
     def __init__(self):
         #print("Retrieving...")
@@ -20,10 +20,10 @@ class TraderSimulator(object):
         self.o = OrderGenerator(minAsk, maxAsk, minBid, maxBid)
 
     def start(self, q):
+        orderid = 0
         while True:
-            # simulate trades; at some point there will be interactive UI
-            order = self.o.generateOrder()
+            order = self.o.generateOrder(orderid)
             #print(order)
             q.put(order)
             time.sleep(GAP_SECONDS)
-            # TODO add to message queue?
+            orderid += 1

@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pymongo import MongoClient
 
-from fx.historicvis import Tick
+from fx.historicvis.model import Tick
 
 #Read file
 CURRENCY_PAIR = 'GBPUSD'
