@@ -1,1 +1,6 @@
 - Make deployable publicly-accessible server
+- Pricing (two-market-orders, 'bid,ask,last')
+- Tidy up UI
+- Finalise historic viz
+- Use something other than strings to communicate between back- and front-ends
+- Add FOK orders

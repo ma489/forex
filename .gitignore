@@ -8,3 +8,8 @@ fx/sim/exchange/__pycache__/
 fx/sim/model/__pycache__/
 fx/sim/trader/__pycache__/
 fx/sim/trader/generators/__pycache__/
+fx/exchangesim/exchange/__pycache__/OrderMatcher.cpython-34.pyc
+fx/exchangesim/trader/__pycache__/TraderSimulator.cpython-34.pyc
+fx/exchangesim/trader/generators/__pycache__/OrderConditionsGenerator.cpython-34.pyc
+fx/exchangesim/trader/generators/__pycache__/OrderGenerator.cpython-34.pyc
+fx/exchangesim/trader/generators/__pycache__/OrderTypeGenerator.cpython-34.pyc

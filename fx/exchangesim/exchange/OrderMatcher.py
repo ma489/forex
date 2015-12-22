@@ -1,17 +1,37 @@
-# TODO stable marriage
-# TODO try to match order with existing orders (stable-marriage algorithm, with time and price predecence/preference)
+from fx.exchangesim.model.OrderConditions import OrderConditions
+from fx.exchangesim.model.OrderType import OrderType
 
-#TODO write tests
+
 class OrderMatcher(object):
-    def __init__(self, order_dao):
-        self.order_dao = order_dao
+    def __init__(self, buy_orders, sell_orders):
+        self.buy_orders = buy_orders
+        self.sell_orders = sell_orders
 
+    # TODO what is this algorithm? pseudo-stable-marriage-bin-packing?
     def match(self, order):
-        orders = self.order_dao.retrieveAllOrders()
-        for ord in orders:
-            if ord.order_size >= order.order_size \
-                    and ord.order_type != order.order_type \
-                    and ord != order:
-                return ord
+        if order.order_type is OrderType.Buy:
+            candidates = self.sell_orders
+            candidates.sort(key=lambda o: (o.order_price, o.entry_time)) #sort by ascending price, then entry time
+        else:
+            candidates = self.buy_orders
+            candidates.sort(key=lambda o: (-o.order_price, o.entry_time)) #sort by descending price, then entry time
+        for candidate in candidates:
+            if candidate == order:
+                continue
+            if price_is_right(candidate, order):
+                return candidate
         else:
             return None
+
+
+def price_is_right(candidate, order):
+    if order.order_conditions is OrderConditions.Market:
+        return True
+    elif order.order_conditions is OrderConditions.Limit:
+        if order.order_type is OrderType.Buy:
+            if candidate.order_price <= order.order_price:
+                return True
+        else:
+            if candidate.order_price >= order.order_price:
+                return True
+    return False

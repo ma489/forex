@@ -25,40 +25,61 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
+<div>
 <br><br><br>
-<b>Order Book</b>
+    <div class="col-md-12">Order Book: GBP/USD</div>
+    <div class="row">
+        <div class="col-md-6">Buy Orders</div>
+        <div class="col-md-6">Sell Orders</div>
+    </div>
 
-<div class="row">
-    <div class="col-md-6">Buy Orders</div>
-    <div class="col-md-6">Sell Orders</div>
+    <div class="col-md-6">
+        <table class="table table-striped" id="buyOrders">
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Conditions</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Filled</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-striped" id="sellOrders">
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Conditions</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Filled</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
-<div class="col-md-6">
-    <table class="table table-striped" id="buyOrders">
-        <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Order Size</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+<script src="static/exchange.js"></script>
+<br><br><br>
+<br><br><br>
+    <div class="col-md-12">Price Info</div>
+<!--TODO sort out layout-->
+<div>
+    <div class="col-sm-4">
+        <ul class="list-group">
+            <li class="list-group-item active">GPB/USD</li>
+            <li class="list-group-item" id="price-info-panel-bid">Bid</li>
+            <li class="list-group-item" id="price-info-panel-ask">Ask</li>
+            <li class="list-group-item" id="price-info-panel-last">Last</li>
+            <li class="list-group-item" id="price-info-panel-other">...</li>
+        </ul>
+    </div>
 </div>
-</div>
-<div class="col-md-6">
-    <table class="table table-striped" id="sellOrders">
-        <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Filled/Order Size</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
-</div>
-<script src="static/websocket.js"></script>
 
 <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon" />
 

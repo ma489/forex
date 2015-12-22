@@ -1,7 +1,9 @@
 import random
+# Generates random prices in ranges minAsk-maxAsk, and minBid-maxBid
+# TODO incorporate current market price?
+from math import trunc
 
-#Generates random prices in ranges minAsk-maxAsk, and minBid-maxBid
-# current market price?
+
 class PriceGenerator(object):
     def __init__(self, minask, maxask, minbid, maxbid):
         self.minAsk = minask
@@ -10,7 +12,12 @@ class PriceGenerator(object):
         self.maxBid = maxbid
 
     def generateAskPrice(self):
-        return random.uniform(self.minAsk, self.maxAsk) #TODO 4dp?
+        x = random.uniform(self.minAsk, self.maxAsk)
+        return self.truncate_to_4dp(x)
 
     def generateBidPrice(self):
-        return random.uniform(self.minBid, self.maxBid) #TODO 4dp?
+        x = random.uniform(self.minBid, self.maxBid)
+        return self.truncate_to_4dp(x)
+
+    def truncate_to_4dp(self, x):
+        return float(trunc(x * 10000)) / 10000
