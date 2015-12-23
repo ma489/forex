@@ -19,3 +19,26 @@
   border: 1px solid #ddd;
   border: 1px solid rgba(86,61,124,.2);
 }
+
+.info-panel-bottom {
+    border-top:1px solid #eee;
+    padding-top: 10px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+.order-book {
+    overflow-y: auto;
+    height: 60%;
+}
+
+#matched-orders {
+    overflow-y: auto;
+    height: 161px;
+}
+
+#place-order {
+    overflow-y: auto;
+    height: 161px;
+}

@@ -9,6 +9,11 @@ def main():
     return static_file('index.html', 'static/')
 
 
+@route('/historic-vis')
+def main():
+    return static_file('historic.html', 'static/')
+
+
 @route('/historic/<currency_pair>')
 def historic(currency_pair='None'):
     result = RD.retrieve(currency_pair)
@@ -18,7 +23,7 @@ def historic(currency_pair='None'):
 
 @route('/exchange')
 def main():
-    return static_file('Exchange.html', 'static/')
+    return static_file('exchange.html', 'static/')
 
 
 @route('/static/:filename#.*#')

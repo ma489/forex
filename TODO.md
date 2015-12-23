@@ -1,7 +1,7 @@
 Must-haves:
 
 - Make deployable publicly-accessible server
-- Tidy up UI
+- Finalise UI
 - Finalise historic viz
 - Check float comparison 
 - Use something other than strings to communicate between back- and front-ends

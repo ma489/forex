@@ -61,7 +61,6 @@ def add_to_order_book(order):
 
 # TODO use objects not strings to communicate with front end?
 def handle_matched_order(matched_order, order):
-    output.put("Matched order %s with %s" % (order.order_id, matched_order.order_id))
     original_order_remaining_unfilled = order.remaining_unfilled
     original_matched_order_remaining_unfilled = matched_order.remaining_unfilled
     order.remaining_unfilled -= original_matched_order_remaining_unfilled
@@ -90,6 +89,7 @@ def settle(matched_order, order, original_matched_order_remaining_unfilled, orig
              original_matched_order_remaining_unfilled, matched_order.remaining_unfilled))
     global last
     last = price(order, matched_order)
+    output.put("Matched order #%s with order #%s" % (order.order_id, matched_order.order_id)) #TODO display last order size & price
     global referencePrice
     referencePrice = last
     update_prices()

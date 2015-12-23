@@ -31,7 +31,7 @@ function displayBuyOrder(event) {
     total = orderSize.slice(0, -2);
     var cell2 = row.insertCell(1); //order conditions
     order_cond = event.data.split(" ")[11].slice(0,-2);
-    cell2.innerHTML = order_cond;
+    cell2.innerHTML = order_cond + " Buy";
     var cell3 = row.insertCell(2); //order price
     ord_price = event.data.split(" ")[4].slice(0,-2);
     cell3.innerHTML = ord_price;
@@ -57,7 +57,7 @@ function displaySellOrder(event) {
     total = orderSize.slice(0, -2);
     var cell2 = row.insertCell(1); //order conditions
     order_cond = event.data.split(" ")[11].slice(0,-2);
-    cell2.innerHTML = order_cond;
+    cell2.innerHTML = order_cond + " Sell";
     var cell3 = row.insertCell(2); //order price
     ord_price = event.data.split(" ")[4].slice(0,-2);
     cell3.innerHTML = ord_price;
@@ -102,13 +102,19 @@ function displayTotalFill(event) {
 function displayMatchedOrders(event) {
 //TODO use same colour if part of same order filling?
     colour = getRandomColour();
+    //colour = "blue"
     orderId1 = event.data.split(" ")[2];
-    orderId2 = event.data.split(" ")[4];
-    $("#" + orderId1).delay(1000).css("outline","solid " + colour);
-    $("#" + orderId2).delay(1000).css("outline","solid " + colour);
+    orderId2 = event.data.split(" ")[5];
+    $(orderId1).delay(1000).css("outline","solid " + colour);
+    $(orderId2).delay(1000).css("outline","solid " + colour);
     //TODO shorten outline time?
-    $("#" + orderId1).animate({outlineColor: "none"}, 2000);
-    $("#" + orderId2).animate({outlineColor: "none"}, 2000);
+    $(orderId1).animate({outlineColor: "none"}, 2000);
+    $(orderId2).animate({outlineColor: "none"}, 2000);
+    var matchedOrdersPanel = $("#matched-orders");
+    matchedOrdersPanel.append("<p>• " + event.data + "</p>");
+    //TODO fix scrolling
+    var height = matchedOrdersPanel.scrollHeight;
+    matchedOrdersPanel.animate({ scrollTop: height }, "slow");
 }
 
 function getRandomColour() {

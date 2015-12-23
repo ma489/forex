@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -15,31 +15,25 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">MansourFX</a>
+            <a class="navbar-brand" href="/"><b>MansourFX</b></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">Historic Data Visualisation</a></li>
                 <li class="active"><a href="#">Exchange Simulation</a></li>
+                <li><a href="/historic-vis">Historic Data Visualisation</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-<div>
-    <!--TODO structure page better - no jumping/scrolling? -->
-<br><br><br>
-    <div class="col-md-12">Order Book: GBP/USD</div>
-    <div class="row">
-        <div class="col-md-6">Buy Orders</div>
-        <div class="col-md-6">Sell Orders</div>
-    </div>
-
+<div class="order-book">
+    <div>
+        <span class="glyphicon glyphicon-book"></span> Order Book - £/$ </div>
     <div class="col-md-6">
         <table class="table table-striped" id="buyOrders">
             <thead>
             <tr>
                 <th>Order ID</th>
-                <th>Conditions</th>
+                <th>Type</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Filled</th>
@@ -54,7 +48,7 @@
             <thead>
             <tr>
                 <th>Order ID</th>
-                <th>Conditions</th>
+                <th>Type</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Filled</th>
@@ -68,17 +62,42 @@
 <script src="static/exchange.js"></script>
 <br><br><br>
 <br><br><br>
-    <div class="col-md-12">Price Info</div>
+    <!--<div class="page-header "></div>-->
 <!--TODO sort out layout-->
-<div>
+<div class="info-panel-bottom">
     <div class="col-sm-4">
         <ul class="list-group">
-            <li class="list-group-item active">GPB/USD</li>
+            <li class="list-group-item active"><span class="glyphicon glyphicon-info-sign"></span> Latest Price Info - GBP/USD  </li>
             <li class="list-group-item" id="price-info-panel-bid">Bid</li>
             <li class="list-group-item" id="price-info-panel-ask">Ask</li>
             <li class="list-group-item" id="price-info-panel-last">Last</li>
             <li class="list-group-item" id="price-info-panel-spread">Spread</li>
         </ul>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+              <p class="panel-title"><span class="glyphicon glyphicon-transfer"></span> Matched Orders</p>
+            </div>
+            <div class="panel-body" id="matched-orders"></div>
+          </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+              <p class="panel-title"><span class="glyphicon glyphicon-plus"></span> Place Order</p>
+            </div>
+            <div class="panel-body" id="place-order">
+                <div class="form-group">
+                    Quantity: <br>
+                    Price: $ ... / Market <br>
+                    <label class="radio-inline"><input type="radio" name="optradio">Buy</label>
+                    <label class="radio-inline"><input type="radio" name="optradio">Sell</label>
+                    <br>
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+          </div>
     </div>
 </div>
 
