@@ -135,3 +135,29 @@ class OrderMatcherTest(unittest.TestCase):
         expected_match = existing_order_1
         actual_match = order_matcher.match(new_order)
         self.assertEqual(actual_match, expected_match)
+
+    def testMatchSellMarketBuyMarketOverLimit(self):
+        new_order = Order(OrderType.Sell, -1, 1, OrderConditions.Market, 1)
+        buy_orders = []
+        sell_orders = []
+        existing_order_1 = Order(OrderType.Buy, -1, 1, OrderConditions.Market, 2)
+        buy_orders.append(existing_order_1)
+        existing_order_2 = Order(OrderType.Buy, 1.5, 1, OrderConditions.Limit, 3)
+        buy_orders.append(existing_order_2)
+        order_matcher = OrderMatcher(buy_orders, sell_orders)
+        expected_match = existing_order_1
+        actual_match = order_matcher.match(new_order)
+        self.assertEqual(actual_match, expected_match)
+
+    def testMatchSellMarketBuyMarketOverLimitEvenWithTimePrecedence(self):
+        new_order = Order(OrderType.Sell, -1, 1, OrderConditions.Market, 1)
+        buy_orders = []
+        sell_orders = []
+        existing_order_1 = Order(OrderType.Buy, 1.5, 1, OrderConditions.Limit, 2)
+        buy_orders.append(existing_order_1)
+        existing_order_2 = Order(OrderType.Buy, -1, 1, OrderConditions.Market, 3)
+        buy_orders.append(existing_order_2)
+        order_matcher = OrderMatcher(buy_orders, sell_orders)
+        expected_match = existing_order_2
+        actual_match = order_matcher.match(new_order)
+        self.assertEqual(actual_match, expected_match)

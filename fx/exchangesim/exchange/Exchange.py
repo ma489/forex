@@ -7,11 +7,16 @@ from fx.exchangesim.exchange.OrderMatcher import OrderMatcher
 from fx.exchangesim.model.OrderConditions import OrderConditions
 from fx.exchangesim.model.OrderType import OrderType
 from fx.exchangesim.trader.TraderSimulator import TraderSimulator
+from fx.exchangesim.exchange.OrderMatcher import sort_buy_orders
+from fx.exchangesim.exchange.OrderMatcher import sort_sell_orders
 
 q = Queue()  # TODO set size?
 output = Queue()
 buyOrders = []
 sellOrders = []
+closePrice = 1.5262  # previous day
+last = closePrice
+referencePrice = closePrice
 
 
 def producer():
@@ -27,6 +32,7 @@ def consumer():
             continue
         already_exists = add_to_order_book(order)
         if not already_exists:
+            update_prices()
             output.put(str(order))
         matched_order = order_matcher.match(order)
         while matched_order is not None and order.remaining_unfilled > 0:
@@ -34,7 +40,7 @@ def consumer():
             time.sleep(1)
             matched_order = order_matcher.match(order)
             # else:
-            #    handle_unmatched_order(order) only needed for FOK
+            #    handle_unmatched_order(order) only needed for FOK, AON
 
 
 # precedence: type, price and entry time
@@ -42,19 +48,18 @@ def add_to_order_book(order):
     if order.order_type is OrderType.Buy:
         if order not in buyOrders:
             buyOrders.append(order)
-            buyOrders.sort(key=lambda o: (o.order_price, o.entry_time))
             return False
         else:
             return True
     else:  # i.e. sell order
         if order not in sellOrders:
             sellOrders.append(order)
-            sellOrders.sort(key=lambda o: (o.order_price, o.entry_time))
             return False
         else:
             return True
 
-#TODO use objects not strings to communicate with front end?
+
+# TODO use objects not strings to communicate with front end?
 def handle_matched_order(matched_order, order):
     output.put("Matched order %s with %s" % (order.order_id, matched_order.order_id))
     original_order_remaining_unfilled = order.remaining_unfilled
@@ -83,44 +88,77 @@ def settle(matched_order, order, original_matched_order_remaining_unfilled, orig
     print("Matched order #%s (%d before, %d after) with #%s (%d before, %d after)"
           % (order.order_id, original_order_remaining_unfilled, order.remaining_unfilled, matched_order.order_id,
              original_matched_order_remaining_unfilled, matched_order.remaining_unfilled))
-    bid = get_bid() #TODO also call when new order arrives
-    ask = get_ask()
+    global last
     last = price(order, matched_order)
-    output.put("PriceUpdate#Bid: %f,Ask: %f,Last: %f" % (bid, ask, last))  # update UI (bid, ask, last)
+    global referencePrice
+    referencePrice = last
+    update_prices()
+
+
+def update_prices():
+    bid = get_bid()
+    ask = get_ask()
+    last_direction = get_direction()
+    spread = (ask - bid) * 10000 # pips
+    output.put("PriceUpdate#Bid: %.4f,Ask: %.4f,Last: %.4f %d,Spread: %d" % (bid, ask, last, last_direction, spread))
+
+
+def get_direction():
+    if closePrice < last:
+        return 1
+    elif closePrice > last:
+        return -1
+    else:
+        return 0
 
 
 def get_bid():
     if len(buyOrders) == 0:
-        return -1.0
-    buyOrders.sort(key=lambda o: (o.order_price, o.entry_time))
+        return referencePrice
+    sort_buy_orders(buyOrders)
     for buyOrder in buyOrders:
         if buyOrder.order_price > -1.0:
             return buyOrder.order_price
-    return buyOrders[0].order_price
+    price = buyOrders[0].order_price
+    if price == -1.0:
+        return referencePrice
+    return price
 
 
 def get_ask():
     if len(sellOrders) == 0:
-        return -1.0
-    sellOrders.sort(key=lambda o: (o.order_price, o.entry_time))
-    for sellOrder in reversed(sellOrders):
+        return referencePrice
+    sort_sell_orders(sellOrders)
+    for sellOrder in sellOrders:
         if sellOrder.order_price > -1.0:
             return sellOrder.order_price
-    return sellOrders[-1].order_price
+    price = sellOrders[0].order_price
+    if price == -1.0:
+        return referencePrice
+    return price
 
 
-def price(order, matched_order): #NYSE rules
+def price(order, matched_order):  # NYSE rules
     if order.order_conditions is OrderConditions.Market and matched_order.order_conditions is OrderConditions.Market:
-        return -1.0 #TODO how to match two market orders
+        if matched_order.order_type is OrderType.Buy:
+            best_bid = get_bid()
+            if best_bid == -1.0:
+                return referencePrice
+            else:
+                return best_bid
+        else:  # i.e. sell
+            best_ask = get_ask()
+            if best_ask == -1.0:
+                return referencePrice
+            else:
+                return best_ask
     elif order.order_conditions is OrderConditions.Limit and matched_order.order_conditions is OrderConditions.Market:
         return order.order_price
     elif order.order_conditions is OrderConditions.Market and matched_order.order_conditions is OrderConditions.Limit:
         return matched_order.order_price
     elif order.order_conditions is OrderConditions.Limit and matched_order.order_conditions is OrderConditions.Limit:
-        if order.entry_time < matched_order.entry_time:
-            return order.order_price
-        else:
-            return matched_order.order_price
+        return matched_order.order_price  # Prefer the price of the resting order (it came first) - "Discriminatory pricing rule"
+
 
 def remove_order(order):
     if order.order_type is OrderType.Buy:

@@ -19,6 +19,9 @@ class TraderSimulator(object):
         maxBid = 1.5497
         self.o = OrderGenerator(minAsk, maxAsk, minBid, maxBid)
 
+    # bid < ask, always.
+    # so should generate ask price of: current bid to max ask
+    # so should generate bid price of: min bid to current ask
     def start(self, q):
         orderid = 0
         while True:

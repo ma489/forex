@@ -8,13 +8,16 @@ class OrderMatcher(object):
         self.sell_orders = sell_orders
 
     # TODO what is this algorithm? pseudo-stable-marriage-bin-packing?
+    # Precedence: Market over limit, then price precedence, then time precedence
     def match(self, order):
         if order.order_type is OrderType.Buy:
             candidates = self.sell_orders
-            candidates.sort(key=lambda o: (o.order_price, o.entry_time)) #sort by ascending price, then entry time
+            # sort by: market over limit, then ascending price, then entry time
+            sort_sell_orders(candidates)
         else:
             candidates = self.buy_orders
-            candidates.sort(key=lambda o: (-o.order_price, o.entry_time)) #sort by descending price, then entry time
+            # sort by: market over limit, then descending price, then entry time
+            sort_buy_orders(candidates)
         for candidate in candidates:
             if candidate == order:
                 continue
@@ -35,3 +38,11 @@ def price_is_right(candidate, order):
             if candidate.order_price >= order.order_price:
                 return True
     return False
+
+
+def sort_sell_orders(candidates):
+    candidates.sort(key=lambda o: (o.order_conditions.value, o.order_price, o.entry_time))
+
+
+def sort_buy_orders(candidates):
+    candidates.sort(key=lambda o: (o.order_conditions.value, -o.order_price, o.entry_time))

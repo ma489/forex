@@ -133,10 +133,21 @@ function updatePrices(event) {
     askPrice = askPriceInfo.split(" ")[1];
     lastPriceInfo = priceInfo[2];
     lastPrice = lastPriceInfo.split(" ")[1];
+    lastDirection = lastPriceInfo.split(" ")[2];
+    spread = priceInfo[3].split(" ")[1]
     var priceInfoPanelBid = document.getElementById('price-info-panel-bid');
     priceInfoPanelBid.innerHTML = "Bid: " + bidPrice;
     var priceInfoPanelAsk = document.getElementById('price-info-panel-ask');
     priceInfoPanelAsk.innerHTML = "Ask: " + askPrice;
     var priceInfoPanelLast = document.getElementById('price-info-panel-last');
-    priceInfoPanelLast.innerHTML = "Last: " + lastPrice;
+    if (lastDirection == "1") {
+        lastMovement = "<font color=\"green\">" + lastPrice + " ▲</font>";
+    } else if (lastDirection == "-1") {
+        lastMovement = "<font color=\"red\">" + lastPrice + " ▼</font>";
+    } else {
+        lastMovement = "<font color=\"black\">" + lastPrice + " -</font>";
+    }
+    priceInfoPanelLast.innerHTML = "Last: " + lastMovement;
+    var priceInfoPanelSpread = document.getElementById('price-info-panel-spread');
+    priceInfoPanelSpread.innerHTML = "Spread: " + spread + " pips";
 }
