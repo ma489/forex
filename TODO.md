@@ -12,3 +12,5 @@ Nice-to-haves:
 
 - Add FOK and AON orders
 - Add order submission
+- Add other currencies
+    - Add covariance/correlation matrices?
