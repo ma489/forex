@@ -6,9 +6,9 @@ d3.json("/historic/GBPUSD",
 );
 
 // Set the dimensions of the canvas / graph
-var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 1200 - margin.left - margin.right,
-    height = 540 - margin.top - margin.bottom;
+var margin = {top: 0, right: 20, bottom: 30, left: 50},
+    width = 900 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
 
 // Set the ranges
 var x = d3.time.scale().range([0, width]);
@@ -33,7 +33,7 @@ var valueline2 = d3.svg.line()
     .y(function(d) { return y(d.Ask); });
 
 // Adds the svg canvas
-var svg = d3.select("body")
+var svg = d3.select("#chart1")
     .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -77,17 +77,17 @@ function display(ticks) { //rename to format datetime
         .attr("class", "y axis")
         .call(yAxis);
 
-    svg.append("text")
-        .attr("x", (width / 2))
-        .attr("y", 0 - (margin.top / 2))
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("text-decoration", "underline")
-        .text("GBP/USD ('the cable'), over time");
-
-    legend = svg.append("g")
-      .attr("class","legend")
-      .attr("transform","translate(50,30)")
-      .style("font-size","12px")
-      .call(d3.legend);
+//    svg.append("text")
+//        .attr("x", (width / 2))
+//        .attr("y", 0 - (margin.top / 2))
+//        .attr("text-anchor", "middle")
+//        .style("font-size", "16px")
+//        .style("text-decoration", "underline")
+//        .text("GBP/USD ('the cable'), over time");
+//
+//    legend = svg.append("g")
+//      .attr("class","legend")
+//      .attr("transform","translate(50,30)")
+//      .style("font-size","12px")
+//      .call(d3.legend);
 }

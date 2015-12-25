@@ -1,27 +1,25 @@
 import time
 
-from fx.exchangesim.trader.generators.OrderGenerator import OrderGenerator
+from fx.exchangesim.trader.OrderGenerator import OrderGenerator
 from fx.historicvis.data.RetrieveData import RetrieveData
 
 GAP_SECONDS = 5
 RD = RetrieveData()
 
-# simulate trades; at some point there will be interactive UI
+# Makes sure bid<ask invariant is maintained
+minAsk = 1.5263
+maxAsk = 1.5498
+minBid = 1.5027
+maxBid = 1.5262
+
+
+# Simulate orders
 class TraderSimulator(object):
     def __init__(self):
-        #print("Retrieving...")
-        # result = RD.retrieve_all("GBPUSD")
-        #print("Retrieved.")
-        # TODO get agg values from DB - not working? model as normal distribution?
-        minAsk = 1.5027
-        maxAsk = 1.5498
-        minBid = 1.5027
-        maxBid = 1.5497
         self.o = OrderGenerator(minAsk, maxAsk, minBid, maxBid)
 
-    # bid < ask, always.
-    # so should generate ask price of: current bid to max ask
-    # so should generate bid price of: min bid to current ask
+
+    #TODO make sure the market is pretty liquid (balance of buy and sell)
     def start(self, q):
         orderid = 0
         while True:

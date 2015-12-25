@@ -100,20 +100,19 @@ function displayTotalFill(event) {
 }
 
 function displayMatchedOrders(event) {
-//TODO use same colour if part of same order filling?
+    //TODO use same colour if part of same order filling?
+    //TODO shorten outline time?
     colour = getRandomColour();
     //colour = "blue"
-    orderId1 = event.data.split(" ")[2];
-    orderId2 = event.data.split(" ")[5];
+    orderId1 = event.data.split(" ")[1];
+    orderId2 = event.data.split(" ")[3];
     $(orderId1).delay(1000).css("outline","solid " + colour);
     $(orderId2).delay(1000).css("outline","solid " + colour);
-    //TODO shorten outline time?
     $(orderId1).animate({outlineColor: "none"}, 2000);
     $(orderId2).animate({outlineColor: "none"}, 2000);
     var matchedOrdersPanel = $("#matched-orders");
     matchedOrdersPanel.append("<p>• " + event.data + "</p>");
-    //TODO fix scrolling
-    var height = matchedOrdersPanel.scrollHeight;
+    var height = matchedOrdersPanel[0].scrollHeight;
     matchedOrdersPanel.animate({ scrollTop: height }, "slow");
 }
 

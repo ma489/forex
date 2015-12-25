@@ -22,7 +22,7 @@
                 <li class="active"><a href="#">Exchange Simulation</a></li>
                 <li><a href="/historic-vis">Historic Data Visualisation</a></li>
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>
     </div>
 </nav>
 <div class="order-book">
@@ -32,7 +32,7 @@
         <table class="table table-striped" id="buyOrders">
             <thead>
             <tr>
-                <th>Order ID</th>
+                <th>#</th>
                 <th>Type</th>
                 <th>Price</th>
                 <th>Quantity</th>
@@ -47,7 +47,7 @@
         <table class="table table-striped" id="sellOrders">
             <thead>
             <tr>
-                <th>Order ID</th>
+                <th>#</th>
                 <th>Type</th>
                 <th>Price</th>
                 <th>Quantity</th>
@@ -88,13 +88,16 @@
               <p class="panel-title"><span class="glyphicon glyphicon-plus"></span> Place Order</p>
             </div>
             <div class="panel-body" id="place-order">
-                <div class="form-group">
-                    Quantity: <br>
-                    Price: $ ... / Market <br>
-                    <label class="radio-inline"><input type="radio" name="optradio">Buy</label>
-                    <label class="radio-inline"><input type="radio" name="optradio">Sell</label>
-                    <br>
-                    <button type="button" class="btn btn-primary">Submit</button>
+                <div class="form-group" style="margin-bottom:0">
+                    <p>Quantity: <input type="text" class="form-control" style="width:50%; display:inline"></p>
+                    <p>Price:&nbsp; &nbsp; $ <input id="price-input" type="text" class="form-control" style="width:50%; display:inline"> or
+                        <label class="radio-inline"><input type="radio" name="optradio" onclick="document.getElementById('price-input').disabled = true;">Market</label></p>
+                    <p style="margin-bottom:5px;">
+                        Type: &nbsp;<label class="radio-inline"><input type="radio" name="optradio">Buy</label>
+                        <label class="radio-inline"><input type="radio" name="optradio">Sell</label>
+                        &nbsp; <button type="button" class="btn btn-primary disabled" style="position: absolute;right:50px">Submit</button>
+                    </p>
+                    <!--<br>-->
                 </div>
             </div>
           </div>

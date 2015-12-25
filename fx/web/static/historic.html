@@ -26,40 +26,94 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-<br><br><br>
-<!--TODO panels with high/low/avg?-->
-Red = Ask. Blue = Bid. <br>
-Bid always less than Ask.<br>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
-<div class="row">
-    <div class="col-sm-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Details</h3>
-            </div>
-            <div class="panel-body">
-                Bid, Ask
-                min, max, avg, last?
-            </div>
+<div class="row" style="margin-right: 0px;">
+    <div class="col-sm-8">
+        <div id="chart1">
+            <!--Red = Ask. Blue = Bid. <br>-->
+            GBP/USD ('the cable')<br>
+        </div>
+        <div id="chart2" class="page-header">
+            SECOND GRAPH HERE
         </div>
     </div>
     <div class="col-sm-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Trends</h3>
+                <h3 class="panel-title">Select Currency Pairs</h3>
+            </div>
+            <div class="panel-body" style="padding-bottom:0">
+                    <p>
+                    Currency Pair 1:
+                      <select class="form-control" style="width:50%; display:inline" id="ccypair1">
+                        <option>GBP/USD</option>
+                        <option>GBP/JPY</option>
+                      </select>
+                    </p>
+                    <p>
+                        Currency Pair 2:
+                          <select class="form-control" style="width:50%; display:inline" id="ccypair2">
+                            <option>GBP/USD</option>
+                            <option>GBP/JPY</option>
+                          </select>
+                    </p>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Currency Pair 1 Details</h3>
             </div>
             <div class="panel-body">
-                Graph here?
+                Bid, Ask
+                min, max, avg
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Currency Pair 2 Details</h3>
+            </div>
+            <div class="panel-body">
+                 Bid, Ask
+                min, max, avg
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Covariance Matrix</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped" id="covarianceMatrix">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Currency Pair 1</th>
+                        <th>Currency Pair 2</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Currency Pair 1</th>
+                        <td>Variance(Pair 1)</td>
+                        <td>Cov(Pair 1, Pair 2)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Currency Pair 2</th>
+                        <td>Cov(Pair 2, Pair 1)</td>
+                        <td>Variance(Pair 2)</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-<script src="static/d3Chart.js"></script>
-
 <link href="static/d3Chart.css" rel="stylesheet">
+<link href="static/row.css" rel="stylesheet">
+<script src="static/d3Chart.js"></script>
+<!--<script src="static/d3Chart2.js"></script>-->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 

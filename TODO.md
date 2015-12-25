@@ -1,16 +1,14 @@
 Must-haves:
 
 - Make deployable publicly-accessible server
-- Finalise UI
-- Finalise historic viz
-- Check float comparison 
-- Use something other than strings to communicate between back- and front-ends
-- Clean up code (e.g. rename generator classes)
-- Fix bid > ask issue (careful of race conditions!)
+- Fix websockets problem
+- Finish historic vis
 
 Nice-to-haves:
 
+- Tidy up UI
+- Use something other than strings to communicate between back- and front-ends
 - Add FOK and AON orders
 - Add order submission
-- Add other currencies
-    - Add covariance/correlation matrices?
+- Add second currency pair
+    - Add covariance/correlation matrix (returns?)
