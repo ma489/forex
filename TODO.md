@@ -1,8 +1,9 @@
 Must-haves:
 
-- Make deployable publicly-accessible server
 - Fix websockets problem
+- Make deployable publicly-accessible server
 - Finish historic vis
+- Fix match highlighting animation
 
 Nice-to-haves:
 

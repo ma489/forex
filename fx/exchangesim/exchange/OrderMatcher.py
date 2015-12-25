@@ -1,35 +1,36 @@
 import time
-
 from fx.exchangesim.model.OrderConditions import OrderConditions
 from fx.exchangesim.model.OrderType import OrderType
-from fx.exchangesim.exchange.TradePricer import price
+from fx.exchangesim.exchange.TradePricer import price_trade
 
-buyOrders = []
-sellOrders = []
-closePrice = 1.5262  # previous day
-last = closePrice
-referencePrice = closePrice
+POISON_PILL = "@POISON_PILL@"
+CLOSE_PRICE = 1.5262
 
 
 class OrderMatcher(object):
     def __init__(self, output_queue):
         self.output = output_queue
+        self.buy_orders = []
+        self.sell_orders = []
+        self.closePrice = CLOSE_PRICE  # previous day
+        self.last = CLOSE_PRICE
+        self.referencePrice = CLOSE_PRICE
 
     # TODO what is this algorithm? pseudo-stable-marriage-bin-packing?
     # Precedence: Market over limit, then price precedence, then time precedence
     def match(self, order):
         if order.order_type is OrderType.Buy:
-            candidates = sellOrders
+            candidates = self.sell_orders
             # sort by: market over limit, then ascending price, then entry time
-            sort_sell_orders(candidates)
+            self.sort_sell_orders(candidates)
         else:
-            candidates = buyOrders
+            candidates = self.buy_orders
             # sort by: market over limit, then descending price, then entry time
-            sort_buy_orders(candidates)
+            self.sort_buy_orders(candidates)
         for candidate in candidates:
             if candidate == order:
                 continue
-            if price_is_right(candidate, order):
+            if self.price_is_right(candidate, order):
                 return candidate
         else:
             return None
@@ -42,14 +43,14 @@ class OrderMatcher(object):
         matched_order.remaining_unfilled -= original_order_remaining_unfilled
         if order.remaining_unfilled <= 0:
             order.remaining_unfilled = 0
-            remove_order(order)
+            self.remove_order(order)
             self.output.put("Filled %s %d" % (order.order_id, order.order_size))
         else:
             self.output.put("Partial: %s,Original: %d,Current: %d"
                             % (order.order_id, order.order_size, order.order_size - order.remaining_unfilled))
         if matched_order.remaining_unfilled <= 0:
             matched_order.remaining_unfilled = 0
-            remove_order(matched_order)
+            self.remove_order(matched_order)
             self.output.put("Filled %s %d" % (matched_order.order_id, matched_order.order_size))
         else:
             self.output.put("Partial: %s,Original: %d,Current: %d"
@@ -63,27 +64,31 @@ class OrderMatcher(object):
               % (order.order_id, original_order_remaining_unfilled, order.remaining_unfilled, matched_order.order_id,
                  original_matched_order_remaining_unfilled, matched_order.remaining_unfilled))
         order_size = original_order_remaining_unfilled - order.remaining_unfilled
-        global last
-        global referencePrice
-        last = price(order, matched_order, get_bid(), get_ask(), referencePrice)
-        self.output.put("Matched #%s with #%s - %d @ %.4f" % (order.order_id, matched_order.order_id, order_size, last))
-        referencePrice = last
+        # global last
+        # global referencePrice
+        self.last = price_trade(order, matched_order, self.get_bid(), self.get_ask(), self.referencePrice)
+        self.output.put("Matched #%s with #%s - %d @ %.4f" % (order.order_id, matched_order.order_id, order_size, self.last))
+        self.referencePrice = self.last
         self.update_prices()
 
     def update_prices(self):
         # TODO check for possible violation of bid<ask when using reference price
-        bid = get_bid()
-        ask = get_ask()
-        last_direction = get_direction()
+        bid = self.get_bid()
+        ask = self.get_ask()
+        last_direction = self.get_direction()
         spread = (ask - bid) * 10000  # pips
-        self.output.put("PriceUpdate#Bid: %.4f,Ask: %.4f,Last: %.4f %d,Spread: %d" % (bid, ask, last, last_direction, spread))
+        self.output.put(
+            "PriceUpdate#Bid: %.4f,Ask: %.4f,Last: %.4f %d,Spread: %d" % (bid, ask, self.last, last_direction, spread))
 
     def start(self, q):
         while True:
             order = q.get()
+            if order == POISON_PILL:
+                print("Got poison pill in OrderMatcher too")
+                break
             if order.remaining_unfilled <= 0:
                 continue
-            already_exists = add_to_order_book(order)
+            already_exists = self.add_to_order_book(order)
             if not already_exists:
                 self.update_prices()
                 self.output.put(str(order))
@@ -94,82 +99,74 @@ class OrderMatcher(object):
                 matched_order = self.match(order)
                 # at some point, handle FOK or AON orders
 
+    # ignorable fp comparison
+    def price_is_right(self, candidate, order):
+        if order.order_conditions is OrderConditions.Market:
+            return True
+        elif order.order_conditions is OrderConditions.Limit:
+            if order.order_type is OrderType.Buy:
+                if candidate.order_price <= order.order_price:
+                    return True
+            else:
+                if candidate.order_price >= order.order_price:
+                    return True
+        return False
 
-# ignorable fp comparison
-def price_is_right(candidate, order):
-    if order.order_conditions is OrderConditions.Market:
-        return True
-    elif order.order_conditions is OrderConditions.Limit:
+    def sort_sell_orders(self, candidates):
+        candidates.sort(key=lambda o: (o.order_conditions.value, o.order_price, o.entry_time))
+
+    def sort_buy_orders(self, candidates):
+        candidates.sort(key=lambda o: (o.order_conditions.value, -o.order_price, o.entry_time))
+
+    # precedence: type, price and entry time
+    def add_to_order_book(self, order):
         if order.order_type is OrderType.Buy:
-            if candidate.order_price <= order.order_price:
+            if order not in self.buy_orders:
+                self.buy_orders.append(order)
+                return False
+            else:
                 return True
-        else:
-            if candidate.order_price >= order.order_price:
+        else:  # i.e. sell order
+            if order not in self.sell_orders:
+                self.sell_orders.append(order)
+                return False
+            else:
                 return True
-    return False
 
-
-def sort_sell_orders(candidates):
-    candidates.sort(key=lambda o: (o.order_conditions.value, o.order_price, o.entry_time))
-
-
-def sort_buy_orders(candidates):
-    candidates.sort(key=lambda o: (o.order_conditions.value, -o.order_price, o.entry_time))
-
-
-# precedence: type, price and entry time
-def add_to_order_book(order):
-    if order.order_type is OrderType.Buy:
-        if order not in buyOrders:
-            buyOrders.append(order)
-            return False
+    def remove_order(self, order):
+        if order.order_type is OrderType.Buy:
+            self.buy_orders.remove(order)
         else:
-            return True
-    else:  # i.e. sell order
-        if order not in sellOrders:
-            sellOrders.append(order)
-            return False
+            self.sell_orders.remove(order)
+
+    def get_bid(self):
+        if len(self.buy_orders) == 0:
+            return self.referencePrice
+        self.sort_buy_orders(self.buy_orders)
+        for buyOrder in self.buy_orders:
+            if buyOrder.order_price > -1.0:  # ignorable fp comparison
+                return buyOrder.order_price
+        price = self.buy_orders[0].order_price
+        if price == -1.0:  # ignorable fp comparison
+            return self.referencePrice
+        return price
+
+    def get_ask(self):
+        if len(self.sell_orders) == 0:
+            return self.referencePrice
+        self.sort_sell_orders(self.sell_orders)
+        for sellOrder in self.sell_orders:
+            if sellOrder.order_price > -1.0:
+                return sellOrder.order_price
+        price = self.sell_orders[0].order_price
+        if price == -1.0:
+            return self.referencePrice
+        return price
+
+    def get_direction(self):
+        if self.closePrice < self.last:
+            return 1
+        elif self.closePrice > self.last:
+            return -1
         else:
-            return True
-
-
-def remove_order(order):
-    if order.order_type is OrderType.Buy:
-        buyOrders.remove(order)
-    else:
-        sellOrders.remove(order)
-
-
-def get_bid():
-    if len(buyOrders) == 0:
-        return referencePrice
-    sort_buy_orders(buyOrders)
-    for buyOrder in buyOrders:
-        if buyOrder.order_price > -1.0:  # ignorable fp comparison
-            return buyOrder.order_price
-    price = buyOrders[0].order_price
-    if price == -1.0:  # ignorable fp comparison
-        return referencePrice
-    return price
-
-
-def get_ask():
-    if len(sellOrders) == 0:
-        return referencePrice
-    sort_sell_orders(sellOrders)
-    for sellOrder in sellOrders:
-        if sellOrder.order_price > -1.0:
-            return sellOrder.order_price
-    price = sellOrders[0].order_price
-    if price == -1.0:
-        return referencePrice
-    return price
-
-
-def get_direction():
-    if closePrice < last:
-        return 1
-    elif closePrice > last:
-        return -1
-    else:
-        return 0
+            return 0
