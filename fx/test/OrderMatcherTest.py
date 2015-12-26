@@ -5,6 +5,7 @@ from fx.exchangesim.model.OrderConditions import OrderConditions
 from fx.exchangesim.model.OrderType import OrderType
 
 
+# TODO fix these tests
 class OrderMatcherTest(unittest.TestCase):
     def testLimitBuyAtMarket(self):
         new_order = Order(OrderType.Buy, 1.5, 1, OrderConditions.Limit, 1)
@@ -154,6 +155,19 @@ class OrderMatcherTest(unittest.TestCase):
         buy_orders = []
         sell_orders = []
         existing_order_1 = Order(OrderType.Buy, 1.5, 1, OrderConditions.Limit, 2)
+        buy_orders.append(existing_order_1)
+        existing_order_2 = Order(OrderType.Buy, -1, 1, OrderConditions.Market, 3)
+        buy_orders.append(existing_order_2)
+        order_matcher = OrderMatcher(buy_orders, sell_orders)
+        expected_match = existing_order_2
+        actual_match = order_matcher.match(new_order)
+        self.assertEqual(actual_match, expected_match)
+
+    def testMatchSellLimitBuyMarketOverLimitEvenWithTimePrecedence(self):
+        new_order = Order(OrderType.Sell, 1.5454, 1, OrderConditions.Limit, 1)
+        buy_orders = []
+        sell_orders = []
+        existing_order_1 = Order(OrderType.Buy, 1.5353, 1, OrderConditions.Limit, 2)
         buy_orders.append(existing_order_1)
         existing_order_2 = Order(OrderType.Buy, -1, 1, OrderConditions.Market, 3)
         buy_orders.append(existing_order_2)

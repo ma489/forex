@@ -4,7 +4,7 @@ from fx.exchangesim.model.OrderType import OrderType
 from fx.exchangesim.exchange.TradePricer import price_trade
 
 POISON_PILL = "@POISON_PILL@"
-CLOSE_PRICE = 1.5262
+CLOSE_PRICE = 1.5262 # reasonable sounding close price
 
 
 class OrderMatcher(object):
@@ -16,8 +16,7 @@ class OrderMatcher(object):
         self.last = CLOSE_PRICE
         self.referencePrice = CLOSE_PRICE
 
-    # TODO what is this algorithm? pseudo-stable-marriage-bin-packing?
-    # Precedence: Market over limit, then price precedence, then time precedence
+    # Matches order based on standard Precedence: Market over limit, then price precedence, then time precedence
     def match(self, order):
         if order.order_type is OrderType.Buy:
             candidates = self.sell_orders
@@ -35,7 +34,7 @@ class OrderMatcher(object):
         else:
             return None
 
-    # TODO use objects not strings to communicate with front end?
+    # TODO use objects not strings to communicate with front end
     def handle_matched_order(self, matched_order, order):
         original_order_remaining_unfilled = order.remaining_unfilled
         original_matched_order_remaining_unfilled = matched_order.remaining_unfilled

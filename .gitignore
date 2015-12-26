@@ -1,5 +1,9 @@
 *.pyc
 .idea/workspace.xml
+.idea/trading-sim.iml
+*.sh~
+nohup.out
+*.md~
 fx/__pycache__/Tick.cpython-34.pyc
 fx/historicvis/__pycache__/
 fx/historicvis/web/__pycache__/

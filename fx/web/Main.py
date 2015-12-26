@@ -1,3 +1,7 @@
+import sys
+sys.path.append('/home/mansour/dev/trading-sim')
+print(sys.path)
+
 from bottle import route, run, static_file, response
 from bson.json_util import dumps
 from fx.historicvis.data.RetrieveData import RetrieveData
@@ -6,12 +10,12 @@ RD = RetrieveData()
 
 @route('/')
 def main():
-    return static_file('index.html', 'static/')
+    return static_file('index.html', 'fx/web/static/')
 
 
 @route('/historic-vis')
-def main():
-    return static_file('historic.html', 'static/')
+def historicvis():
+    return static_file('historic.html', 'fx/web/static/')
 
 
 @route('/historic/<currency_pair>')
@@ -23,13 +27,12 @@ def historic(currency_pair='None'):
 
 @route('/exchange')
 def main():
-    return static_file('exchange.html', 'static/')
+    return static_file('exchange.html', 'fx/web/static/')
 
 
 @route('/static/:filename#.*#')
 def main(filename):
-    return static_file(filename, 'static/')
+    return static_file(filename, 'fx/web/static/')
 
 
-run(host='localhost', port=8080)
-# TODO start trading-sim here too in new thread? Exchange.start()
+run(server='paste')

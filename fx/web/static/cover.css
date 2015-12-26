@@ -28,6 +28,7 @@ html,
 body {
   height: 100%;
   background-image: url("The_City_London_grayscale.png");
+  background-repeat: none;
   background-size: 100%;
 }
 body {
