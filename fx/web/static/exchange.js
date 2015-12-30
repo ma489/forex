@@ -3,6 +3,9 @@ var ws = new WebSocket("ws://127.0.0.1:8081/"),
                 sellOrders = document.createElement('ul');
                 matchedOrders = document.createElement('ul');
 
+var lastOrderIdMatched = null;
+var lastColour = null;
+
 ws.onmessage = function (event) {
     if (event.data.indexOf("Buy") > -1) { //this is a buy order
         displayBuyOrder(event);
@@ -96,15 +99,19 @@ function displayTotalFill(event) {
          $(prog_id).switchClass("progress-bar-striped","progress-bar-success",500);
          $(prog_id).html(orderSize + "/" + orderSize);
     });
+    $("#" + orderId).delay(1000).animate({outlineColor: "none"}, 2000);
     $("#" + orderId).delay(8000).fadeOut(3000);
 }
 
 function displayMatchedOrders(event) {
-    //TODO use same colour if part of same order filling?
     //TODO shorten outline time?
-    colour = getRandomColour();
-    //colour = "blue"
     orderId1 = event.data.split(" ")[1];
+    if (orderId1 == lastOrderIdMatched) { //use same colour (this order was filled by multiple other orders)
+        colour = lastColour;
+    } else {
+        colour = getRandomColour();
+    }
+    //colour = "blue"
     orderId2 = event.data.split(" ")[3];
     $(orderId1).delay(1000).css("outline","solid " + colour);
     $(orderId2).delay(1000).css("outline","solid " + colour);
@@ -114,6 +121,8 @@ function displayMatchedOrders(event) {
     matchedOrdersPanel.append("<p>• " + event.data + "</p>");
     var height = matchedOrdersPanel[0].scrollHeight;
     matchedOrdersPanel.animate({ scrollTop: height }, "slow");
+    lastOrderIdMatched = orderId1;
+    lastColour = colour;
 }
 
 function getRandomColour() {

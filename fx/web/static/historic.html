@@ -23,87 +23,72 @@
                 <li><a href="/exchange">Exchange Simulation</a></li>
                 <li class="active"><a href="#">Historic Data Visualisation</a></li>
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>
     </div>
 </nav>
 
-<script src="http://d3js.org/d3.v3.min.js"></script>
-
+<div class="row" style="margin-right: 0px; padding-left:30px; padding-bottom: 5px">
+    <div id="chart1">
+        <!--GBP/USD ('the cable')-->
+    </div>
+</div>
 <div class="row" style="margin-right: 0px;">
-    <div class="col-sm-8">
-        <div id="chart1">
-            <!--Red = Ask. Blue = Bid. <br>-->
-            GBP/USD ('the cable')<br>
-        </div>
-        <div id="chart2" class="page-header">
-            SECOND GRAPH HERE
+        <div class="col-sm-6">
+        <div class="panel panel-primary" style="margin-left:10px">
+            <div class="panel-heading">
+                <h3 class="panel-title">Choose Currency Pair Data</h3>
+            </div>
+            <div class="panel-body" style="margin-bottom: 25px">
+                <p>
+                    Pair:
+                    <select class="form-control" style="width:50%; display:inline" id="ccypair1">
+                        <option value="GBPUSD">GBP/USD ('the cable')</option>
+                        <option value="GBPJPY">GBP/JPY</option>
+                    </select>
+                    &nbsp; <button type="button" class="btn btn-primary" onclick="drawGraph();">Update Chart</button>
+                </p>
+                    Start:
+                    <div class='input-group date' id='datetimepicker1' style="width: 40%; display: inline-table">
+                        <input type='text' class="form-control" id="datetimepicker1date" value="11/01/2015 5:00 PM"/>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    End:
+                    <div class='input-group date' id='datetimepicker2' style="width: 40%; display: inline-table">
+                        <input type='text' class="form-control" id="datetimepicker2date" value="11/01/2015 5:07 PM" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+            </div>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Select Currency Pairs</h3>
-            </div>
-            <div class="panel-body" style="padding-bottom:0">
-                    <p>
-                    Currency Pair 1:
-                      <select class="form-control" style="width:50%; display:inline" id="ccypair1">
-                        <option>GBP/USD</option>
-                        <option>GBP/JPY</option>
-                      </select>
-                    </p>
-                    <p>
-                        Currency Pair 2:
-                          <select class="form-control" style="width:50%; display:inline" id="ccypair2">
-                            <option>GBP/USD</option>
-                            <option>GBP/JPY</option>
-                          </select>
-                    </p>
-            </div>
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Currency Pair 1 Details</h3>
+                <h3 class="panel-title">Currency Pair Details</h3>
             </div>
             <div class="panel-body">
-                Bid, Ask
-                min, max, avg
-            </div>
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Currency Pair 2 Details</h3>
-            </div>
-            <div class="panel-body">
-                 Bid, Ask
-                min, max, avg
-            </div>
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Covariance Matrix</h3>
-            </div>
-            <div class="panel-body">
-                <table class="table table-striped" id="covarianceMatrix">
-                    <thead>
+                <table class="table table-striped" id="currencyDetails" style="margin-bottom: 0px">
                     <tr>
                         <th></th>
-                        <th>Currency Pair 1</th>
-                        <th>Currency Pair 2</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                        <th>Average</th>
                     </tr>
                     <tr>
-                        <th scope="row">Currency Pair 1</th>
-                        <td>Variance(Pair 1)</td>
-                        <td>Cov(Pair 1, Pair 2)</td>
+                        <th scope="row">Bid</th>
+                        <td>MinBid</td>
+                        <td>MaxBid</td>
+                        <td>AvgBid</td>
                     </tr>
                     <tr>
-                        <th scope="row">Currency Pair 2</th>
-                        <td>Cov(Pair 2, Pair 1)</td>
-                        <td>Variance(Pair 2)</td>
+                        <th scope="row">Ask</th>
+                        <td>MinAsk</td>
+                        <td>MaxAsk</td>
+                        <td>AvgAsk</td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -112,10 +97,17 @@
 
 <link href="static/d3Chart.css" rel="stylesheet">
 <link href="static/row.css" rel="stylesheet">
+<link href="static/bootstrap-datetimepicker.css" rel="stylesheet">
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="static/d3Chart.js"></script>
-<!--<script src="static/d3Chart2.js"></script>-->
-
+<script type="text/javascript">
+   drawGraph();
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="static/bootstrap-datetimepicker.js"></script>
 
 <!--TODO create fallback?-->
 <!-- Latest compiled and minified CSS -->
@@ -130,5 +122,20 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker2').datetimepicker({
+            useCurrent: false
+        });
+        $("#datetimepicker1").on("dp.change", function (e) {
+            $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker2").on("dp.change", function (e) {
+            $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+</script>
 </body>
 </html>

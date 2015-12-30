@@ -3,8 +3,6 @@ Must-haves:
 - Make deployable publicly-accessible server
 - Fix tests
 - Finish historic vis
-- add time + sorting to order book
-- Fix match highlighting animation
 
 Nice-to-haves:
 
@@ -14,3 +12,5 @@ Nice-to-haves:
 - Add order submission
 - Add second currency pair
     - Add covariance/correlation matrix (returns?)
+- Add time column to order book
+- Add sorting to order book
