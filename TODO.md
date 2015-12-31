@@ -1,9 +1,9 @@
 Must-haves:
 
-- Make deployable publicly-accessible server
+- Fix relative paths
 - Fix tests
-- Finish historic vis
-
+- Test HTML/CSS against big monitor
+    
 Nice-to-haves:
 
 - Tidy up UI
@@ -14,3 +14,5 @@ Nice-to-haves:
     - Add covariance/correlation matrix (returns?)
 - Add time column to order book
 - Add sorting to order book
+- Add min/max/avg to historic vis
+- HTML/CSS cleanup

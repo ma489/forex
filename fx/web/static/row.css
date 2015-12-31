@@ -30,7 +30,7 @@
 
 .order-book {
     overflow-y: auto;
-    height: 60%;
+    height: calc(100vh - 320px);
 }
 
 #matched-orders {

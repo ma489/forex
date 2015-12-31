@@ -1,5 +1,6 @@
 import csv
 import calendar
+import os
 from datetime import datetime
 
 from pymongo import MongoClient
@@ -9,10 +10,9 @@ from fx.historicvis.model import Tick
 month_lookup = {v: k for k,v in enumerate(calendar.month_abbr)}
 
 #Read file
-CURRENCY_PAIR = 'GBPUSD'
-FORMATTED_CURRENCY_PAIR = 'GBP/USD'
-FILE = '/home/mansour/dev/trading-sim/fx/historicvis/data/samplesource/DAT_ASCII_%s_T_201511.csv' % CURRENCY_PAIR
-#       /home/mansour/dev/trading-sim/fx/historicvis/data/samplesource/DAT_ASCII_GBPJPY_T_201511.csv
+CURRENCY_PAIR = 'GBPUSD' # GBPJPY
+FORMATTED_CURRENCY_PAIR = 'GBP/USD' #GBP/JPY
+FILE = os.getcwd() + 'fx/historicvis/data/samplesource/DAT_ASCII_%s_T_201511.csv' % CURRENCY_PAIR
 tickList = []
 print("Reading...")
 
@@ -51,8 +51,6 @@ with open(FILE, 'r') as csvfile:
 print("Done.")
 print("Size: ")
 print(len(tickList))
-# print(tickList[0])
-# print(tickList[0].toDict())
 
 #Save to MongoDB
 client = MongoClient() #localhost:27017
@@ -68,6 +66,5 @@ print("Inserting...")
 tick_data.insert_many(records)
 print(db.collection_names(include_system_collections=False))
 print("Retrieving first 'record'...")
-# print(tick_data.find_one())
 
-#tick_data.createIndex(("DateTime",1)) #TODO is this right?
+#Note: When setting up, create index in MongoDB: db.getCollection('tick_data').createIndex({DateTime:1})

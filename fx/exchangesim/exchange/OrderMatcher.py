@@ -104,10 +104,10 @@ class OrderMatcher(object):
             return True
         elif order.order_conditions is OrderConditions.Limit:
             if order.order_type is OrderType.Buy:
-                if candidate.order_price <= order.order_price:
+                if candidate.order_price <= order.order_price or candidate.order_price == -1:
                     return True
             else:
-                if candidate.order_price >= order.order_price:
+                if candidate.order_price >= order.order_price or candidate.order_price == -1:
                     return True
         return False
 

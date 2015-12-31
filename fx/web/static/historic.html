@@ -27,16 +27,16 @@
     </div>
 </nav>
 
-<div class="row" style="margin-right: 0px; padding-left:30px; padding-bottom: 5px">
+<div class="row" id="main-container" style="margin-right: 0px; padding-left:30px; padding-bottom: 5px; height: calc(100vh - 300px)">
     <div id="chart1">
         <!--GBP/USD ('the cable')-->
     </div>
 </div>
-<div class="row" style="margin-right: 0px;">
+<div class="row" style="margin-right: 0px; position: fixed; bottom: 0">
         <div class="col-sm-6">
         <div class="panel panel-primary" style="margin-left:10px">
             <div class="panel-heading">
-                <h3 class="panel-title">Choose Currency Pair Data</h3>
+                <h3 class="panel-title "><span class="glyphicon glyphicon-cog"></span> Choose Currency Pair Data</h3>
             </div>
             <div class="panel-body" style="margin-bottom: 25px">
                 <p>
@@ -67,7 +67,7 @@
     <div class="col-sm-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Currency Pair Details</h3>
+                <h3 class="panel-title"><span class="glyphicon glyphicon-zoom-in"></span> Currency Pair Details</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-striped" id="currencyDetails" style="margin-bottom: 0px">

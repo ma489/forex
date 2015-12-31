@@ -1,3 +1,9 @@
-FX Trading Simulation and Historic Visualisation
+FX Trading Simulation and Historic Data Visualisation
 
-When setting up, create index in MongoDB: db.getCollection('tick_data').createIndex({DateTime:1})
+To run: run-fx.sh
+
+![Cover](http://i.imgur.com/7IsmXnl.png)
+
+![ExchangeSim](http://i.imgur.com/42PCEg5.png)
+
+![HistoricViz](http://i.imgur.com/07a1E9F.png)

@@ -12,11 +12,11 @@ class RetrieveData:
         tick_data = db['tick_data']  # collection 'tick_data'
         formatted_currency_pair = currency_pair[0:3] + "/" + currency_pair[3:7]
         print(formatted_currency_pair)
-        print(start_date)
+        # print(start_date)
         start = self.get_date(start_date)
-        print(start)
+        # print(start)
         end = self.get_date(end_date)
-        print(end)
+        # print(end)
         result = tick_data.find({"Pair": formatted_currency_pair, "DateTime": {"$gte": start, "$lte": end}},
                                 {'_id': 0}).sort([("DateTime", 1)])
         return [x for x in result]

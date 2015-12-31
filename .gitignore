@@ -1,4 +1,5 @@
 *.pyc
+.idea/
 .idea/workspace.xml
 .idea/trading-sim.iml
 *.sh~

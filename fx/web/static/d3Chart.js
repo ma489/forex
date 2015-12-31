@@ -13,10 +13,13 @@ function drawGraph() {
         }
     );
 
+    parent_width = document.getElementById("chart1").offsetWidth;
+    parent_height = document.getElementById("main-container").offsetHeight;
+
     // Set the dimensions of the canvas / graph
     var margin = {top: 0, right: 20, bottom: 30, left: 50},
-        width = 1300 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+        width = parent_width - margin.left - margin.right,
+        height = parent_height - margin.top - margin.bottom;
 
     // Set the ranges
     var x = d3.time.scale().range([0, width]);
@@ -88,6 +91,15 @@ function drawGraph() {
         svg.append("g")
             .attr("class", "y axis")
             .call(yAxis);
+
+        svg.append("text")
+            .attr("x", (width / 2))
+            .attr("y", 20 - (margin.top / 2))
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("text-decoration", "underline")
+            .text(currencyPair + " - Bid (blue) and Ask (red) prices, over time");
+
 
     }
 
